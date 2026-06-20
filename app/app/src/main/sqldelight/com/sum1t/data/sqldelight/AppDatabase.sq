@@ -1,0 +1,173 @@
+-- =========================
+-- GRADES
+-- =========================
+
+CREATE TABLE grades (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    grade_id INTEGER NOT NULL,
+    name TEXT NOT NULL UNIQUE,
+    description TEXT,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+);
+
+selectAllGrades:
+SELECT * FROM grades;
+
+selectGradeById:
+SELECT * FROM grades WHERE id = ?;
+
+insertGrade:
+INSERT INTO grades(grade_id,name, description, created_at, updated_at)
+VALUES (?, ?, ?, ?, ?);
+
+updateGrade:
+UPDATE grades
+SET name = ?, description = ?, updated_at = ?
+WHERE id = ?;
+
+deleteGrade:
+DELETE FROM grades WHERE id = ?;
+
+deleteAllGrades:
+DELETE FROM grades;
+
+
+-- =========================
+-- SUBJECTS
+-- =========================
+
+CREATE TABLE subjects (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    subject_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    grade_id INTEGER,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    FOREIGN KEY (grade_id) REFERENCES grades(id)
+);
+
+selectSubjectsByGrade:
+SELECT * FROM subjects WHERE grade_id = ?;
+
+selectAllSubjects:
+SELECT * FROM subjects;
+
+insertSubject:
+INSERT INTO subjects(name, subject_id, grade_id, created_at, updated_at)
+VALUES (?, ?, ?, ?, ?);
+
+deleteSubject:
+DELETE FROM subjects WHERE id = ?;
+
+
+-- =========================
+-- TOPICS
+-- =========================
+
+CREATE TABLE topics (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    topic_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    subject_id INTEGER,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    FOREIGN KEY (subject_id) REFERENCES subjects(id)
+);
+
+selectTopicsBySubject:
+SELECT * FROM topics WHERE subject_id = ?;
+
+insertTopic:
+INSERT INTO topics(name, topic_id, subject_id, created_at, updated_at)
+VALUES (?, ?, ?, ?, ?);
+
+deleteTopic:
+DELETE FROM topics WHERE id = ?;
+
+
+-- =========================
+-- QUESTIONS
+-- =========================
+
+CREATE TABLE questions (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    question_id INTEGER NOT NULL,
+    question_text TEXT NOT NULL,
+    explanation TEXT,
+    question_type TEXT NOT NULL,
+    difficulty_level TEXT,
+    question_tier TEXT NOT NULL,
+    marks REAL NOT NULL,
+    negative_marks REAL NOT NULL,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    is_deleted INTEGER NOT NULL DEFAULT 0,
+    topic_id INTEGER,
+    attempted INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (topic_id) REFERENCES topics(id)
+);
+
+selectQuestionsByTopic:
+SELECT * FROM questions
+WHERE topic_id = ? AND is_deleted = 0;
+
+getQuestionsCount:
+SELECT COUNT(*) FROM questions
+WHERE is_deleted = 0;
+
+getAttemptedQuestionsCount:
+SELECT COUNT(*) FROM questions
+WHERE attempted = 1;
+
+getAllQuestions:
+SELECT * FROM questions
+WHERE is_deleted = 0;
+
+
+insertQuestion:
+INSERT INTO questions(
+    question_text,
+    question_id,
+    explanation,
+    question_type,
+    difficulty_level,
+    question_tier,
+    marks,
+    negative_marks,
+    created_at,
+    updated_at,
+    is_deleted,
+    topic_id
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+softDeleteQuestion:
+UPDATE questions
+SET is_deleted = 1
+WHERE id = ?;
+
+
+-- =========================
+-- OPTIONS
+-- =========================
+
+CREATE TABLE options (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    option_text TEXT NOT NULL,
+    is_correct INTEGER NOT NULL,
+    option_order INTEGER NOT NULL,
+    question_id INTEGER,
+    FOREIGN KEY (question_id) REFERENCES questions(id)
+);
+
+selectOptionsByQuestion:
+SELECT * FROM options
+WHERE question_id = ?
+ORDER BY option_order;
+
+insertOption:
+INSERT INTO options(option_text, is_correct, option_order, question_id)
+VALUES (?, ?, ?, ?);
+
+deleteOptionsByQuestion:
+DELETE FROM options WHERE question_id = ?;

@@ -1,0 +1,92 @@
+[versions]
+
+compile-sdk = "35"
+min-sdk = "24"
+target-sdk = "35"
+version-code = "1"
+
+agp = "8.10.1"
+kotlin = "2.0.21"
+coreKtx = "1.15.0"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+lifecycleRuntimeKtx = "2.8.7"
+activityCompose = "1.10.0"
+composeBom = "2024.09.00"
+navigationCompose = "2.8.5"
+koin = "4.0.0"
+splash-screen = "1.0.1"
+system-ui = "0.27.0"
+plutoVersion = "2.2.2"
+retrofit = "2.11.0"
+ktor = "3.0.0"
+mr_mike = "0.7.0"
+material3Android = "1.3.2"
+swipe-refresh = "0.19.0"
+navigationComposeVersion = "2.9.2"
+accompanist = "0.27.0"
+coil = "2.5.0"
+playServicesLocation = "21.3.0"
+playServicesMlkitBarcodeScanning = "18.3.1"
+runtime = "1.10.6"
+animationCore = "1.10.6"
+uiGeometry = "1.10.6"
+animation = "1.10.6"
+
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+splashscreen = {module = "androidx.core:core-splashscreen", version.ref = "splash-screen"}
+koin_compat = { module = "io.insert-koin:koin-android-compat", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+system-ui = {module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "system-ui"}
+pluto = {module = "com.plutolib:pluto", version.ref = "plutoVersion"}
+pluto-no-op = {module = "com.plutolib:pluto-no-op", version.ref = "plutoVersion"}
+pluto-plugin = {module = "com.plutolib.plugins:bundle-core", version.ref = "plutoVersion"}
+pluto-plugin-no-op = {module = "com.plutolib.plugins:bundle-core-no-op", version.ref = "plutoVersion"}
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-gson-convertor = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+
+accompanist = {module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist"}
+pager = {module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist"}
+pager-indicator = {module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist"}
+coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+
+
+#ktor-client-okHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+#ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+#ktor-client-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+mr_mike = { module = "com.github.mrmike:ok2curl", version.ref = "mr_mike" }
+swipe-refresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "swipe-refresh" }
+
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationComposeVersion" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+play-services-mlkit-barcode-scanning = { group = "com.google.android.gms", name = "play-services-mlkit-barcode-scanning", version.ref = "playServicesMlkitBarcodeScanning" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
+androidx-compose-animation-core = { group = "androidx.compose.animation", name = "animation-core", version.ref = "animationCore" }
+androidx-compose-ui-geometry = { group = "androidx.compose.ui", name = "ui-geometry", version.ref = "uiGeometry" }
+androidx-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animation" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew :app:compileDebugKotlin)",
+      "Bash(grep -E \"\\\\.\\(kt|kts\\)$\")",
+      "Bash(xargs cat:*)",
+      "Bash(./gradlew :app:generateDebugAppDatabaseInterface)",
+      "Bash(./gradlew assembleDebug)"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "com.sum1t.preppy.datastore";
+option java_multiple_files = true;
+
+message UserPreferences {
+  bool dark_mode = 1;
+  string user_name = 2;
+  bool onboarding_completed = 3;
+  bool level_subject_selected = 4;
+  string selected_theme_palette = 5;
+  bool notifications_enabled = 6;
+  bool haptics_enabled = 7;
+
+
+}
