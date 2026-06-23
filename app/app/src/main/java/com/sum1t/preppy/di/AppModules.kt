@@ -82,6 +82,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
+import org.koin.core.scope.get
 import org.koin.dsl.module
 import java.util.concurrent.TimeUnit
 
@@ -108,7 +109,7 @@ val viewModelModule: Module = module {
     factory { ProfileViewModel(get(), get(), get(), get(), get(), get()) }
     factory { OnboardingViewModel(get(), get(), get(), get()) }
     factory { SettingsViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
-    factory { FlashCardViewModel() }
+    factory { FlashCardViewModel(get(), get()) }
     factory { QuizViewModel(get(), get()) }
 }
 

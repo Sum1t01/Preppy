@@ -196,7 +196,11 @@ fun Navigation() {
 
 
         composable(Screen.FlashCard.route) {
-            FlashCardScreen()
+            FlashCardScreen(
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
         }
 
         composable(Screen.Remote.route) {

@@ -124,9 +124,9 @@ fun LevelSelectionScreen(
         },
         bottomBar = {
 
-            if (state.isLoading) {
-                AnimatedThemedButtonShimmer()
-            } else {
+//            if (state.isLoading) {
+//                AnimatedThemedButtonShimmer()
+//            } else {
                 AnimatedThemedButton(
                     text = "Continue",
 //                    enabled = isButtonEnabled,
@@ -136,7 +136,7 @@ fun LevelSelectionScreen(
                     viewModel.onEvent(LevelSelectionEvent.Continue(onContinue))
 //                    onContinue(state.selected.toList())
                 }
-            }
+//            }
         }
     ) { padding ->
 
