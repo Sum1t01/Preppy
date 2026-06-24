@@ -13,6 +13,7 @@ object UserPreferencesSerializer : Serializer<UserPreferences> {
     override val defaultValue: UserPreferences =
         UserPreferences.newBuilder()
             .setHapticsEnabled(true)
+            .setIsUserLoginEnabled(false)
             .setNotificationsEnabled(true)
             .build()
 

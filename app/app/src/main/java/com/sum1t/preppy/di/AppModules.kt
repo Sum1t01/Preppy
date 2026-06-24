@@ -52,6 +52,7 @@ import com.sum1t.preppy.data.usecase.userpreferences.GetHapticsEnabledUseCaseImp
 import com.sum1t.preppy.data.usecase.userpreferences.GetLevelSubjectSelectedUseCaseImpl
 import com.sum1t.preppy.data.usecase.userpreferences.GetNotificationEnabledUseCaseImpl
 import com.sum1t.preppy.data.usecase.userpreferences.GetThemePaletteUseCaseImpl
+import com.sum1t.preppy.data.usecase.userpreferences.IsUserLoginEnabledUseCaseImpl
 import com.sum1t.preppy.data.usecase.userpreferences.SetHapticsEnabledUseCaseImpl
 import com.sum1t.preppy.data.usecase.userpreferences.SetLevelSubjectSelectedUseCaseImpl
 import com.sum1t.preppy.data.usecase.userpreferences.SetNotificationEnabledUseCaseImpl
@@ -69,6 +70,7 @@ import com.sum1t.preppy.domain.usecase.userpreferences.GetHapticsEnabledUseCase
 import com.sum1t.preppy.domain.usecase.userpreferences.GetLevelSubjectSelectedUseCase
 import com.sum1t.preppy.domain.usecase.userpreferences.GetNotificationEnabledUseCase
 import com.sum1t.preppy.domain.usecase.userpreferences.GetThemePaletteUseCase
+import com.sum1t.preppy.domain.usecase.userpreferences.IsUserLoginEnabledUseCase
 import com.sum1t.preppy.domain.usecase.userpreferences.SetHapticsEnabledUseCase
 import com.sum1t.preppy.domain.usecase.userpreferences.SetLevelSubjectSelectedUseCase
 import com.sum1t.preppy.domain.usecase.userpreferences.SetNotificationEnabledUseCase
@@ -106,7 +108,7 @@ val viewModelModule: Module = module {
     factory { LevelSelectionViewModel(get(), get(), get(), get(), get()) }
     factory { SubjectSelectionViewModel(get(), get(), get(), get()) }
     factory { HomeViewModel(get(), get()) }
-    factory { ProfileViewModel(get(), get(), get(), get(), get(), get()) }
+    factory { ProfileViewModel(get(), get(), get(), get(), get(), get(),get()) }
     factory { OnboardingViewModel(get(), get(), get(), get()) }
     factory { SettingsViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { FlashCardViewModel(get(), get()) }
@@ -171,6 +173,7 @@ val useCaseModule: Module = module {
     factory<GetAttemptedQuestionsCountUseCase> { GetAttemptedQuestionsCountUseCaseImpl(get()) }
     factory<SaveGradesUseCase> { SaveGradesUseCaseImpl(get()) }
     factory<GetQuestionsForQuizUseCase> { GetQuestionsForQuizUseCaseImpl(get()) }
+    factory<IsUserLoginEnabledUseCase> { IsUserLoginEnabledUseCaseImpl(get()) }
 
     factory {
         ScheduleNotificationsUseCase(get())

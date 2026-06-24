@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.sum1t.preppy.domain.usecase.userpreferences.GetDarkModeUseCase
 import com.sum1t.preppy.domain.usecase.userpreferences.GetHapticsEnabledUseCase
 import com.sum1t.preppy.domain.usecase.userpreferences.GetNotificationEnabledUseCase
+import com.sum1t.preppy.domain.usecase.userpreferences.IsUserLoginEnabledUseCase
 import com.sum1t.preppy.domain.usecase.userpreferences.SetDarkModeUseCase
 import com.sum1t.preppy.domain.usecase.userpreferences.SetHapticsEnabledUseCase
 import com.sum1t.preppy.domain.usecase.userpreferences.SetNotificationEnabledUseCase
@@ -27,6 +28,7 @@ data class ProfileUiState(
     val isDarkMode: Boolean = false,
     val isHapticsEnabled: Boolean = true,
     val isNotificationsEnabled: Boolean = true,
+    val isUserLoginEnabled: Boolean = false,
 
     val isLoading: Boolean = false
 )
@@ -51,7 +53,8 @@ sealed class SettingsAction {
 data class Preferences(
     val darkMode: Boolean,
     val haptics: Boolean,
-    val notifications: Boolean
+    val notifications: Boolean,
+    val isUserLoginEnabled: Boolean
 )
 class ProfileViewModel(
     private val getDarkModeUseCase: GetDarkModeUseCase,
@@ -60,6 +63,7 @@ class ProfileViewModel(
     private val setHapticsEnabledUseCase: SetHapticsEnabledUseCase,
     private val getNotificationEnabledUseCase: GetNotificationEnabledUseCase,
     private val setNotificationEnabledUseCase: SetNotificationEnabledUseCase,
+    private val isUserLoginEnabledUseCase: IsUserLoginEnabledUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfileUiState())
@@ -75,17 +79,18 @@ class ProfileViewModel(
             combine(
                 getDarkModeUseCase.invoke(),
                 getHapticsEnabledUseCase.invoke(),
-                getNotificationEnabledUseCase.invoke()
-
-            ) { dark, haptics, notifications ->
-                Preferences(dark, haptics, notifications)
+                getNotificationEnabledUseCase.invoke(),
+                isUserLoginEnabledUseCase.invoke()
+            ) { dark, haptics, notifications, isUserLoginEnabled ->
+                Preferences(dark, haptics, notifications, isUserLoginEnabled)
             }.collect { perf ->
 
                 _uiState.update { current ->
                     current.copy(
                         isHapticsEnabled = perf.haptics,
                         isDarkMode = perf.darkMode,
-                        isNotificationsEnabled = perf.notifications
+                        isNotificationsEnabled = perf.notifications,
+                        isUserLoginEnabled = perf.isUserLoginEnabled
                     )
                 }
             }

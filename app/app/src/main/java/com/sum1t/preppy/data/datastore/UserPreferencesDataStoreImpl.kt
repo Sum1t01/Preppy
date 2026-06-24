@@ -37,6 +37,9 @@ class UserPreferencesDataStoreImpl(
     override val notificationsEnabled: Flow<Boolean>
         get() = context.userPreferencesStore.data.map { it.notificationsEnabled }
 
+    override val isUserLoginEnabled: Flow<Boolean>
+        get() = context.userPreferencesStore.data.map { it.isUserLoginEnabled }
+
 
     override suspend fun setDarkMode(enabled: Boolean) {
         context.userPreferencesStore.updateData { prefs ->

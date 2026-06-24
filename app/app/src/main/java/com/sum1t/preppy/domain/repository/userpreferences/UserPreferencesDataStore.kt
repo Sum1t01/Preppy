@@ -14,6 +14,7 @@ interface UserPreferencesDataStore {
 
     val notificationsEnabled: Flow<Boolean>
     val hapticsEnabled: Flow<Boolean>
+    val isUserLoginEnabled: Flow<Boolean>
 
     suspend fun setDarkMode(enabled: Boolean)
     suspend fun setUserName(name: String)

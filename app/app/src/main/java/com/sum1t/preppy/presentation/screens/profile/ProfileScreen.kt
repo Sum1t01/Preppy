@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -126,6 +127,16 @@ fun ProfileScreen(
                     actionIconContentColor = MaterialTheme.colorScheme.onBackground
                 )
             )
+        },
+        bottomBar = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("preppy")
+            }
         }
     ) { padding ->
 
@@ -140,15 +151,17 @@ fun ProfileScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            item {
-                ProfileGlassHeader(
-                    hapticsEnabled = state.isHapticsEnabled,
-                    userName = state.name,
-                    username = state.username,
-                    email = state.email,
-                    streak = state.streak
-                ) {
-                    onRemoteScreen()
+            if (state.isUserLoginEnabled) {
+                item {
+                    ProfileGlassHeader(
+                        hapticsEnabled = state.isHapticsEnabled,
+                        userName = state.name,
+                        username = state.username,
+                        email = state.email,
+                        streak = state.streak
+                    ) {
+                        onRemoteScreen()
+                    }
                 }
             }
 
@@ -181,12 +194,13 @@ fun ProfileScreen(
                 )
             }
 
-            item {
-
-                LogoutCard(
-                    hapticsEnabled = state.isHapticsEnabled,
-                    onClick = { showLogoutSheet = true }
-                )
+            if (state.isUserLoginEnabled) {
+                item {
+                    LogoutCard(
+                        hapticsEnabled = state.isHapticsEnabled,
+                        onClick = { showLogoutSheet = true }
+                    )
+                }
             }
         }
 

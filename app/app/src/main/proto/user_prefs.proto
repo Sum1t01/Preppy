@@ -11,6 +11,6 @@ message UserPreferences {
   string selected_theme_palette = 5;
   bool notifications_enabled = 6;
   bool haptics_enabled = 7;
-
+  bool is_user_login_enabled = 8;
 
 }
