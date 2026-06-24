@@ -95,6 +95,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sum1t.preppy.BuildConfig
 import com.sum1t.preppy.ui.components.AnimatedThemedButton
 import com.sum1t.preppy.ui.components.ThemedButtonType
 import org.koin.androidx.compose.koinViewModel
@@ -132,10 +133,21 @@ fun ProfileScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .navigationBarsPadding(),
+                    .navigationBarsPadding()
+                    .padding(vertical = 12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("preppy")
+                Text(
+                    text = "© ${java.time.Year.now().value} Preppy. All rights reserved.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Text(
+                    text = "Version ${BuildConfig.VERSION_NAME}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.outline
+                )
             }
         }
     ) { padding ->
