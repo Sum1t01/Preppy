@@ -21,12 +21,10 @@ data class FlashCardUiState(
     val isLoading: Boolean = true,
     val questions: List<QuestionResponse> = emptyList(),
     val currentIndex: Int = 0,
-    val showExplanation: Boolean = false,
     val isFinished: Boolean = false,
     val flashcardsState: Map<Int, FlashCardsState> = emptyMap()
 ) {
     val currentFlashcardsState: FlashCardsState? get() = flashcardsState[currentIndex]
-
     val progress: Float get() = if (questions.isEmpty()) 0f else (currentIndex + 1f) / questions.size
 
     val isLastQuestion: Boolean get() = currentIndex == questions.size - 1
@@ -36,9 +34,7 @@ data class FlashCardUiState(
 sealed class FlashCardUiEvents {
     data object Load : FlashCardUiEvents()
     data object Reveal : FlashCardUiEvents()
-    data object Next : FlashCardUiEvents()
-    data object Previous : FlashCardUiEvents()
-    data object ToggleExplanation : FlashCardUiEvents()
+    data object Skip : FlashCardUiEvents()
 }
 
 class FlashCardViewModel(
@@ -61,9 +57,17 @@ class FlashCardViewModel(
     fun onEvent(event: FlashCardUiEvents) {
         when (event) {
             FlashCardUiEvents.Load -> loadQuizzes()
-            else -> {
+            FlashCardUiEvents.Reveal -> onRevealAnswer()
+            FlashCardUiEvents.Skip -> onSkip()
+        }
+    }
 
-            }
+    private fun onSkip() {
+        _uiState.update {
+            if (it.currentIndex < it.questions.size - 1)
+                it.copy(currentIndex = it.currentIndex + 1)
+            else
+                it.copy(isFinished = true)
         }
     }
 
@@ -82,5 +86,18 @@ class FlashCardViewModel(
             }
         }
     }
+
+    private fun onRevealAnswer() {
+        val state = _uiState.value
+        val flashcardState = state.flashcardsState[state.currentIndex] ?: return
+        _uiState.update {
+            it.copy(
+                flashcardsState = it.flashcardsState + (it.currentIndex to flashcardState.copy(
+                    isRevealed = true
+                ))
+            )
+        }
+    }
+
 
 }

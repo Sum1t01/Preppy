@@ -1,11 +1,17 @@
 package com.sum1t.preppy.presentation.screens.flashcard
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +19,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,19 +30,23 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,6 +63,8 @@ import com.sum1t.preppy.presentation.screens.quiz.QuizTimer
 import com.sum1t.preppy.presentation.screens.quiz.QuizUiEvent
 import com.sum1t.preppy.presentation.screens.quiz.ResultScreen
 import com.sum1t.preppy.presentation.screens.quiz.ScoreChip
+import com.sum1t.preppy.ui.components.AnimatedThemedButton
+import com.sum1t.preppy.ui.components.ThemedButtonType
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -123,7 +136,26 @@ fun FlashCardScreen(
         },
 
         bottomBar = {
+            if (!state.isLoading && !state.isFinished && state.questions.isNotEmpty()) {
+                val qState = state.currentFlashcardsState
+                val isRevealed = qState?.isRevealed ?: false
+                val isLastQuestion = state.isLastQuestion ?: false
 
+                val buttonText = if (isLastQuestion) "Finish" else "Next"
+
+                AnimatedVisibility(
+                    visible = isRevealed,
+                    enter = (scaleIn(spring(Spring.DampingRatioMediumBouncy)) + fadeIn(tween(200))),
+                    exit = (scaleOut(spring(Spring.DampingRatioMediumBouncy)) + fadeOut(tween(150)))
+                ) {
+                    AnimatedThemedButton(
+                        text = buttonText,
+                        type = ThemedButtonType.TERTIARY,
+                        enableHaptics = isHapticsEnabled,
+                        onClick = { viewModel.onEvent(FlashCardUiEvents.Skip) }
+                    )
+                }
+            }
         },
         containerColor = MaterialTheme.colorScheme.background
 
@@ -203,11 +235,40 @@ fun FlashCardScreen(
                     Spacer(Modifier.height(20.dp))
 
                     qState?.question?.let {
-                        FlashCard(
-                            question = it.questionText,
-                            answer = it.options?.firstOrNull { it.isCorrect }?.text ?: ""
-                        )
+                        key(it.id) {
+                            FlashCard(
+                                question = it.questionText,
+                                answer = it.options?.firstOrNull { it.isCorrect }?.text ?: "",
+                                onFlip = { viewModel.onEvent(FlashCardUiEvents.Reveal) }
+                            )
+                        }
                     }
+
+                    qState?.isRevealed?.let {
+                        AnimatedVisibility(
+                            visible = qState?.isRevealed == false,
+                            enter = fadeIn(tween(200)),
+                            exit = fadeOut(tween(150))
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 4.dp),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                TextButton(onClick = { viewModel.onEvent(FlashCardUiEvents.Skip) }) {
+                                    Text(
+                                        text = "Skip  →",
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = MaterialTheme.colorScheme.onBackground.copy(
+                                            alpha = 0.42f
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -232,23 +293,35 @@ fun FlashCardResultScreen(
 fun FlashCard(
     question: String,
     answer: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFlip: () -> Unit
 ) {
     var flipped by remember { mutableStateOf(false) }
 
     val rotation by animateFloatAsState(
         targetValue = if (flipped) 180f else 0f,
         animationSpec = tween(
-            durationMillis = 600,
+            durationMillis = 1000,
             easing = FastOutSlowInEasing
         ),
         label = "card_rotation"
     )
 
-    Card(
+    val cardColor by animateColorAsState(
+        targetValue = if (flipped) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+        animationSpec = tween(
+            durationMillis = 1000,
+            easing = FastOutSlowInEasing
+        ),
+        label = "card_color"
+    )
+
+
+    ElevatedCard(
         modifier = modifier
             .fillMaxWidth()
-            .height(220.dp)
+            .defaultMinSize(300.dp)
+            .height(400.dp)
             .graphicsLayer {
                 rotationY = rotation
 
@@ -257,8 +330,10 @@ fun FlashCard(
             }
             .clickable {
                 flipped = !flipped
+                onFlip()
             },
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.elevatedCardColors(containerColor = cardColor)
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
